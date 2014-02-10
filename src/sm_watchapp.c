@@ -49,6 +49,16 @@ const int WEATHER_IMG_IDS[] = {
   RESOURCE_ID_IMAGE_DISCONNECT
 };
 
+char *upcase(char *str)
+{
+    for (int i = 0; str[i] != 0; i++) {
+        if (str[i] >= 'a' && str[i] <= 'z') {
+            str[i] -= 0x20;
+        }
+    }
+
+    return str;
+}
 
 static uint32_t s_sequence_number = 0xFFFFFFFE;
 
@@ -100,7 +110,8 @@ void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
 
 
   // TODO: Only update the date when it's changed.
-  strftime(date_text, sizeof(date_text), "%a, %b %e", tick_time);
+  strftime(date_text, sizeof(date_text), "%a %b %e", tick_time);
+  upcase(date_text);
   text_layer_set_text(text_date_layer, date_text);
 
 
@@ -381,17 +392,17 @@ static void init(void) {
 
 		text_date_layer = text_layer_create(bg_bounds);
 		text_layer_set_text_alignment(text_date_layer, GTextAlignmentCenter);
-		text_layer_set_text_color(text_date_layer, GColorWhite);
-		text_layer_set_background_color(text_date_layer, GColorClear);
+		text_layer_set_text_color(text_date_layer, GColorBlack);
+		text_layer_set_background_color(text_date_layer, GColorWhite);
 		layer_set_frame(text_layer_get_layer(text_date_layer), GRect(0, 44, 144, 30));
-		text_layer_set_font(text_date_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_21)));
+		text_layer_set_font(text_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
 		layer_add_child(window_layer, text_layer_get_layer(text_date_layer));
 
 
 		text_time_layer = text_layer_create(bg_bounds);
 		text_layer_set_text_alignment(text_time_layer, GTextAlignmentCenter);
-		text_layer_set_text_color(text_time_layer, GColorWhite);
-		text_layer_set_background_color(text_time_layer, GColorClear);
+		text_layer_set_text_color(text_time_layer, GColorBlack);
+		text_layer_set_background_color(text_time_layer, GColorWhite);
 		layer_set_frame(text_layer_get_layer(text_time_layer), GRect(0, -6, 144, 50));
 		text_layer_set_font(text_time_layer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_49)));
 		layer_add_child(window_layer, text_layer_get_layer(text_time_layer));
